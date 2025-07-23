@@ -1,44 +1,20 @@
-// const express = require('express');
-
-
-
-// const app = express();
-
-// app.get('/',(req,res)=>{
-//     res.send('Home page is listening...');
-// });
-
-// app.get('/about',(req,res)=>{
-//     res.send('Hii i am about...');
-// });
-
-
-// app.get('/contact',(req,res)=>{
-//     res.send('Hii i am contact...');
-// });
-
-
-// app.listen(7000,()=>{
-//     console.log('App is running on 7000 port...');
-// });
-////////////////////////////////////////////////////////////////
-
-//Returning practise.html 
-
 const express = require('express');
-const path = require('path');
-
+const mongoose = require('mongoose');
 const app = express();
 
-// Serve static files like CSS, JS, images
-app.use(express.static(__dirname)); // ⭐ IMPORTANT ⭐
+const userRouter = require('./routes/user');
 
-// Serve HTML file
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'practise.html'));
-});
+app.use(express.json());
+app.use('/users', userRouter);
+
+// 🔗 Connect to MongoDB
+mongoose.connect('mongodb://127.0.0.1:27017/userdb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('MongoDB connected'))
+.catch((err) => console.error('Mongo Error:', err));
 
 app.listen(7000, () => {
-  console.log('Server running at http://localhost:7000');
+  console.log('Server running on http://localhost:7000');
 });
-
